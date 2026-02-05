@@ -120,6 +120,17 @@ shadowcommit:cae7704c739c05696818a344fe8e6b8045d446b22a308f7b737fd9683e711864:16
 
 To generate a real transaction signature on devnet, you need a funded keypair (see https://faucet.solana.com for test SOL sources).
 
+### Funded signature demo (devnet)
+
+We generated a real devnet signature with Memo evidence:
+
+- Explorer: https://explorer.solana.com/tx/2bfjpghQn7SN2VzscfV8AnyasozMigQ46WpLez7yUF5TiDADyzznUvj6SUmEUHiyKh1K4EgRQKLx3YLikBw9FVov?cluster=devnet
+- Memo:
+
+```
+shadowcommit:ece598d25a1956afd1d4b65a4917a5b161e7808ed2eff07a29b9aa0d37bb6554:29458726a351d2ec7ff0948c4fba39570fd7aa5df953ec84f225d5ce81b4d4bd
+```
+
 **2) Commit** (unfunded → precondition fails)
 
 ```text

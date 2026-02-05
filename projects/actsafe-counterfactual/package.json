@@ -8,7 +8,7 @@
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/cli.ts",
     "start": "node dist/cli.js",
-    "demo:funded": "tsx src/demoFunded.ts"
+    "demo:funded": "npx tsx src/demoFunded.ts"
   },
   "bin": {
     "actsafe": "dist/cli.js"
