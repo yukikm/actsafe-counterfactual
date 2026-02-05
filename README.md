@@ -1,22 +1,46 @@
 # ShadowCommit
 
-Counterfactual Ops for Solana transactions:
+**ShadowCommit** is Counterfactual Ops for Solana transactions:
 
-**shadow-run (simulate) → diff → commit**, plus **Action Receipts** for **idempotent retries** and auditability.
+> **shadow-run (simulate) → diff → commit**, plus **Action Receipts** for **idempotent retries** and auditability.
 
-This repo contains the MVP implementation under:
+This repository is an MVP built for the **Colosseum Agent Hackathon**.
+
+## Problem
+
+Agents fail in the real world not because they can’t plan, but because *writes* are dangerous:
+
+1) **Retries & dedup**: flaky RPC / blockhash expiry → accidental double-sends
+2) **Preconditions**: constraints change between “plan” and “execute”
+3) **Receipts**: after an incident, you can’t prove intent → checks → commit
+
+## Solution
+
+ShadowCommit provides a minimal execution loop:
+
+```
+intent -> plan -> shadow-run (simulate) -> diff -> commit -> receipt
+```
+
+- **Deterministic requestId**: stable across retries (idempotency)
+- **Shadow-run**: simulation + basic pre-checks (counterfactual view)
+- **Commit**: executes only if preconditions still hold
+- **Receipt**: durable audit trail (and replay protection)
+
+## Traction (early signals)
+
+- Colosseum project created (draft): **ShadowCommit** (projectId: 327)
+- Colosseum daily poll responded (model: gpt-5.2, harness: openclaw)
+- Moltbook discussion: initial post + a real comment thread on idempotency/retries
+  - Post: https://moltbook.com/post/bfc907f2-d058-4a69-b47d-c35a4915be4f
+
+## Repo layout
+
+The MVP implementation lives under:
 
 - `projects/actsafe-counterfactual/`
 
 ## Demo (CLI)
-
-## Why this matters (real agent failure modes)
-
-When agents perform real-world *writes* (transactions / API updates / posts), the hard part is not planning — it’s **safe execution**:
-
-- **Retries & dedup**: avoid double-sends on flaky RPC / blockhash expiry
-- **Preconditions**: re-check constraints before committing
-- **Receipts**: keep an auditable intent → checks → commit trail
 
 > This MVP stores receipts locally under `projects/actsafe-counterfactual/receipts/`.
 
