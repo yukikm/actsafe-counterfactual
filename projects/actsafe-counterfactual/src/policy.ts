@@ -7,9 +7,13 @@ export type ActSafePolicy = {
   allowlistMints?: string[];
   // Maximum SOL per single transfer.
   maxSolPerTransfer?: number;
+  // Maximum SOL spent per day (local enforcement).
+  maxSolPerDay?: number;
   // Maximum SPL token amount per transfer (UI units) per mint.
   // Example: {"So11111111111111111111111111111111111111112": 5}
   maxUiAmountPerSplMint?: Record<string, number>;
+  // Maximum SPL token amount spent per day (UI units) per mint.
+  maxUiAmountPerSplMintPerDay?: Record<string, number>;
   // Require simulation to have no error before commit.
   requireSimulationSuccess?: boolean;
 };

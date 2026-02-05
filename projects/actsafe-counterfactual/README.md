@@ -84,8 +84,12 @@ Example `policy.json`:
   "allowlistTo": ["<RECIPIENT_PUBKEY>"] ,
   "allowlistMints": ["<MINT_PUBKEY>"],
   "maxSolPerTransfer": 0.01,
+  "maxSolPerDay": 0.05,
   "maxUiAmountPerSplMint": {
     "<MINT_PUBKEY>": 5
+  },
+  "maxUiAmountPerSplMintPerDay": {
+    "<MINT_PUBKEY>": 20
   },
   "requireSimulationSuccess": true
 }

@@ -17,6 +17,7 @@ import {
 import { listReceipts, loadReceipt, saveReceipt, type ActionReceipt } from './receiptStore.js';
 import { loadPolicy, enforcePolicyForSolTransfer, enforcePolicyForSplTransfer } from './policy.js';
 import { buildSplTransferTx, signTx, splPreconditions } from './spl.js';
+import { checkAndRecordSolSpend, checkAndRecordSplSpend } from './spendLedger.js';
 
 function nowIso() {
   return new Date().toISOString();
@@ -188,6 +189,12 @@ async function commit(args: { request: string }) {
 
     enforcePolicyForSolTransfer(policy, { to: to.toBase58(), lamports });
 
+    // Daily budget policy (local): record spend before sending.
+    await checkAndRecordSolSpend({
+      lamports,
+      ...(typeof policy.maxSolPerDay === 'number' ? { maxSolPerDay: policy.maxSolPerDay } : {}),
+    });
+
     // Preconditions (MVP): balance must still cover lamports.
     const pre = await getBalanceLamports(payer.publicKey);
     if (pre < lamports) {
@@ -236,6 +243,13 @@ async function commit(args: { request: string }) {
       mint: mint.toBase58(),
       amountBaseUnits,
       decimals,
+    });
+
+    await checkAndRecordSplSpend({
+      mint: mint.toBase58(),
+      amountBaseUnits,
+      decimals,
+      ...(policy.maxUiAmountPerSplMintPerDay ? { maxUiAmountPerSplMintPerDay: policy.maxUiAmountPerSplMintPerDay } : {}),
     });
 
     // Preconditions: mint decimals + owner balance.
