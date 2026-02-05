@@ -124,3 +124,11 @@ This is a lightweight way to make the receipt tamper-evident *on-chain* without 
 - Expand from SOL transfer to SPL token transfers + program CPIs
 - Store receipt hashes on-chain (tiny receipt program) for tamper-evidence
 - Policy-based autopass (bounded budgets, allowlists)
+
+## Integration note: replay protection patterns
+
+Several infra/payment flows (e.g. x402-style payment verification) have the same core gotcha: **a valid signature can be replayed** unless you persist a processed-set.
+
+This repo now includes a tiny local helper (`src/processedSigStore.ts`) that stores processed signatures with a TTL under `receipts/processed-sigs.json`.
+
+It’s not a database, but it’s a practical default for agent runtimes.
