@@ -1,5 +1,6 @@
 import {
   PublicKey,
+  TransactionInstruction,
   TransactionMessage,
   VersionedTransaction,
   type Signer,
@@ -14,6 +15,8 @@ import {
 } from '@solana/spl-token';
 import { connection } from './solana.js';
 
+const MEMO_PROGRAM_ID = new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr');
+
 export async function buildSplTransferTx(params: {
   payer: PublicKey;
   owner: PublicKey;
@@ -21,6 +24,7 @@ export async function buildSplTransferTx(params: {
   mint: PublicKey;
   amountBaseUnits: bigint;
   decimals: number;
+  memo?: string;
 }) {
   const conn = connection();
   const { blockhash } = await conn.getLatestBlockhash();
@@ -28,7 +32,17 @@ export async function buildSplTransferTx(params: {
   const ownerAta = getAssociatedTokenAddressSync(params.mint, params.owner, false, TOKEN_PROGRAM_ID);
   const toAta = getAssociatedTokenAddressSync(params.mint, params.toOwner, false, TOKEN_PROGRAM_ID);
 
-  const ixs = [];
+  const ixs: TransactionInstruction[] = [];
+
+  if (params.memo) {
+    ixs.push(
+      new TransactionInstruction({
+        programId: MEMO_PROGRAM_ID,
+        keys: [],
+        data: Buffer.from(params.memo, 'utf8'),
+      }),
+    );
+  }
 
   const toAtaInfo = await conn.getAccountInfo(toAta);
   if (!toAtaInfo) {

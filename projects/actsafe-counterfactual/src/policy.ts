@@ -16,6 +16,10 @@ export type ActSafePolicy = {
   maxUiAmountPerSplMintPerDay?: Record<string, number>;
   // Require simulation to have no error before commit.
   requireSimulationSuccess?: boolean;
+
+  // Optional: attach a Solana Memo instruction containing the receipt evidence hash.
+  attachMemoEvidence?: boolean;
+  memoPrefix?: string;
 };
 
 export function loadPolicy(): ActSafePolicy {

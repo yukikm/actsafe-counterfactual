@@ -92,8 +92,17 @@ Example `policy.json`:
     "<MINT_PUBKEY>": 20
   },
   "requireSimulationSuccess": true
+  ,
+  "attachMemoEvidence": true,
+  "memoPrefix": "shadowcommit"
 }
 ```
+
+If `attachMemoEvidence` is enabled, commits will add a Solana **Memo** instruction containing:
+
+`<memoPrefix>:<requestId>:<evidenceHash>`
+
+This is a lightweight way to make the receipt tamper-evident *on-chain* without deploying a custom program.
 
 ## Notes
 

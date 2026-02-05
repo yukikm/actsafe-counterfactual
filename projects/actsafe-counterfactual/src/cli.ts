@@ -179,6 +179,10 @@ async function commit(args: { request: string }) {
 
   const policy = loadPolicy();
 
+  const memoPrefix = policy.memoPrefix ?? 'shadowcommit';
+  const memo = policy.attachMemoEvidence ? `${memoPrefix}:${receipt.requestId}:${receipt.evidenceHash ?? ''}` : undefined;
+  const memoArg = memo ? { memo } : {};
+
   if (policy.requireSimulationSuccess && receipt.shadow?.err) {
     throw new Error('Policy violation: simulation must succeed before commit');
   }
@@ -205,7 +209,7 @@ async function commit(args: { request: string }) {
       throw new Error('Precondition failed: insufficient balance');
     }
 
-    const tx = await buildSolTransferTx({ from: payer.publicKey, to, lamports });
+    const tx = await buildSolTransferTx({ from: payer.publicKey, to, lamports, ...memoArg });
     tx.sign([payer]);
 
     try {
@@ -268,6 +272,7 @@ async function commit(args: { request: string }) {
       mint,
       amountBaseUnits,
       decimals,
+      ...memoArg,
     });
     signTx(tx, [payer]);
 

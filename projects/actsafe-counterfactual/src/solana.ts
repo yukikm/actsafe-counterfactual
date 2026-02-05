@@ -3,11 +3,14 @@ import {
   Keypair,
   PublicKey,
   SystemProgram,
+  TransactionInstruction,
   TransactionMessage,
   VersionedTransaction,
   type Commitment,
 } from '@solana/web3.js';
 import { readFileSync } from 'node:fs';
+
+const MEMO_PROGRAM_ID = new PublicKey('MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr');
 
 export function getRpcUrl() {
   return process.env.SOLANA_RPC_URL ?? 'https://api.devnet.solana.com';
@@ -31,6 +34,7 @@ export async function buildSolTransferTx(params: {
   from: PublicKey;
   to: PublicKey;
   lamports: bigint;
+  memo?: string;
 }) {
   const conn = connection();
   const { blockhash } = await conn.getLatestBlockhash();
@@ -41,10 +45,22 @@ export async function buildSolTransferTx(params: {
     lamports: Number(params.lamports),
   });
 
+  const ixs = [] as TransactionInstruction[];
+  if (params.memo) {
+    ixs.push(
+      new TransactionInstruction({
+        programId: MEMO_PROGRAM_ID,
+        keys: [],
+        data: Buffer.from(params.memo, 'utf8'),
+      }),
+    );
+  }
+  ixs.push(ix);
+
   const msg = new TransactionMessage({
     payerKey: params.from,
     recentBlockhash: blockhash,
-    instructions: [ix],
+    instructions: ixs,
   }).compileToV0Message();
 
   return new VersionedTransaction(msg);

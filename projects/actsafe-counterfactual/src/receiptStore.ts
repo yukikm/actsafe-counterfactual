@@ -16,6 +16,11 @@ export type ActionReceipt = {
   receiptHash?: string;
   prevReceiptHash?: string;
 
+  // On-chain evidence hash (best-effort MVP):
+  // a stable hash of the action intent + shadow-run result.
+  // Can be attached to a Solana Memo instruction to create a public, timestamped proof.
+  evidenceHash?: string;
+
   kind: 'sol_transfer' | 'spl_transfer';
   params:
     | {
@@ -82,6 +87,18 @@ function computeReceiptHash(receipt: ActionReceipt): string {
   return sha256Hex(stableStringify(clone));
 }
 
+export function computeEvidenceHash(receipt: ActionReceipt): string {
+  // Keep this stable across retries and across commit states.
+  // Do not include timestamps, status, or commit.signature.
+  const core = {
+    requestId: receipt.requestId,
+    kind: receipt.kind,
+    params: receipt.params,
+    shadow: receipt.shadow ?? null,
+  };
+  return sha256Hex(stableStringify(core));
+}
+
 export function verifyReceiptHash(receipt: ActionReceipt): { ok: boolean; expected?: string } {
   if (!receipt.receiptHash) return { ok: true };
   const expected = computeReceiptHash(receipt);
@@ -110,6 +127,10 @@ export async function loadReceipt(requestId: string): Promise<ActionReceipt | nu
 export async function saveReceipt(receipt: ActionReceipt) {
   await ensureReceiptsDir();
   const idx = await loadIndex();
+
+  if (!receipt.evidenceHash) {
+    receipt.evidenceHash = computeEvidenceHash(receipt);
+  }
 
   // Link to previous receipt hash (hash chain)
   if (idx.lastReceiptHash) receipt.prevReceiptHash = idx.lastReceiptHash;
