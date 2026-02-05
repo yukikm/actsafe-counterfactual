@@ -66,8 +66,23 @@ Notes:
 ## CLI
 
 - `actsafe plan-transfer --to <pubkey> --sol <amount>`
+- `actsafe plan-spl-transfer --to <owner_pubkey> --mint <mint_pubkey> --amount <ui_amount> --decimals <decimals>`
 - `actsafe commit --request <requestId>`
 - `actsafe receipts --limit 20`
+
+## Policy (optional)
+
+You can enforce a minimal policy at commit-time by setting `ACTSAFE_POLICY` to a JSON file path.
+
+Example `policy.json`:
+
+```json
+{
+  "allowlistTo": ["<RECIPIENT_PUBKEY>"] ,
+  "maxSolPerTransfer": 0.01,
+  "requireSimulationSuccess": true
+}
+```
 
 ## Notes
 

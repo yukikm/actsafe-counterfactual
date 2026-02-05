@@ -9,13 +9,22 @@ export type ActionReceipt = {
   updatedAt: string;
   status: ActionReceiptStatus;
 
-  kind: 'sol_transfer';
-  params: {
-    from: string;
-    to: string;
-    lamports: string;
-    cluster: string;
-  };
+  kind: 'sol_transfer' | 'spl_transfer';
+  params:
+    | {
+        from: string;
+        to: string;
+        lamports: string;
+        cluster: string;
+      }
+    | {
+        from: string;
+        to: string;
+        mint: string;
+        amountBaseUnits: string;
+        decimals: number;
+        cluster: string;
+      };
 
   shadow?: {
     preBalanceLamports?: string;
