@@ -1,0 +1,28 @@
+{
+  "name": "actsafe-counterfactual",
+  "version": "1.0.0",
+  "description": "Counterfactual Ops + Action Receipts: shadow-run, diff, commit, idempotency",
+  "type": "module",
+  "main": "dist/cli.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/cli.ts",
+    "start": "node dist/cli.js"
+  },
+  "bin": {
+    "actsafe": "dist/cli.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@solana/web3.js": "^1.98.4",
+    "yargs": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.1",
+    "@types/yargs": "^17.0.35",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
