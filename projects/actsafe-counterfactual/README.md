@@ -55,6 +55,16 @@ npm run dev -- commit --request <REQUEST_ID>
 
 Receipts are stored locally under `./receipts/`.
 
+### Funded demo helper (optional)
+
+If you have a funded devnet keypair, you can run:
+
+```bash
+npm run demo:funded
+```
+
+This will perform a **self-transfer** (0.001 SOL) to generate a real signature and (optionally) attach Memo evidence when enabled in `ACTSAFE_POLICY`.
+
 ### Expected output (example)
 
 `plan-transfer` prints a JSON blob containing the `requestId` and the stored receipt. You’ll use that `requestId` for `commit`.
