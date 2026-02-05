@@ -27,6 +27,8 @@ intent -> plan -> shadow-run (simulate) -> diff -> commit -> receipt
 - **Commit**: executes only if preconditions still hold
 - **Receipt**: durable audit trail (and replay protection)
 
+Current MVP supports SOL transfers end-to-end, plus planned SPL token transfers (with optional ATA creation).
+
 ## Traction (early signals)
 
 - Colosseum project created (draft): **ShadowCommit** (projectId: 327)

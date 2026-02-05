@@ -1,7 +1,7 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
-export type ActionReceiptStatus = 'planned' | 'simulated' | 'committed' | 'failed';
+export type ActionReceiptStatus = 'planned' | 'simulated' | 'submitting' | 'committed' | 'failed';
 
 export type ActionReceipt = {
   requestId: string;

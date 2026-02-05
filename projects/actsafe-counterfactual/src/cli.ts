@@ -8,13 +8,15 @@ import {
   buildSolTransferTx,
   getBalanceLamports,
   loadKeypairFromFile,
-  sendTx,
+  sendTxSignatureOnly,
+  confirmSignature,
   simulateTx,
   getRpcUrl,
+  getSignatureStatus,
 } from './solana.js';
 import { listReceipts, loadReceipt, saveReceipt, type ActionReceipt } from './receiptStore.js';
 import { loadPolicy, enforcePolicyForSolTransfer } from './policy.js';
-import { buildSplTransferTx, signTx } from './spl.js';
+import { buildSplTransferTx, signTx, splPreconditions } from './spl.js';
 
 function nowIso() {
   return new Date().toISOString();
@@ -142,6 +144,30 @@ async function commit(args: { request: string }) {
     console.log(JSON.stringify({ ok: true, alreadyCommitted: true, receipt }, null, 2));
     return;
   }
+
+  // Recovery: if we have a signature but never finalized, try to resolve it.
+  if (receipt.status === 'submitting' && receipt.commit?.signature) {
+    const st = await getSignatureStatus(receipt.commit.signature);
+    if (!st) {
+      console.log(JSON.stringify({ ok: false, pending: true, receipt }, null, 2));
+      return;
+    }
+    if (st.err) {
+      receipt.status = 'failed';
+      receipt.updatedAt = nowIso();
+      receipt.commit = { signature: receipt.commit.signature, err: st.err };
+      await saveReceipt(receipt);
+      console.log(JSON.stringify({ ok: false, resolved: true, receipt }, null, 2));
+      return;
+    }
+    // confirmed / finalized
+    receipt.status = 'committed';
+    receipt.updatedAt = nowIso();
+    receipt.commit = { signature: receipt.commit.signature, err: undefined };
+    await saveReceipt(receipt);
+    console.log(JSON.stringify({ ok: true, resolved: true, receipt }, null, 2));
+    return;
+  }
   if (receipt.kind !== 'sol_transfer' && receipt.kind !== 'spl_transfer') throw new Error(`Unsupported kind: ${receipt.kind}`);
 
   const payer = loadKeypairFromFile(mustKeypairPath());
@@ -176,15 +202,18 @@ async function commit(args: { request: string }) {
     tx.sign([payer]);
 
     try {
-      const sent = await sendTx(tx);
-      receipt.status = 'committed';
+      const sig = await sendTxSignatureOnly(tx);
+      receipt.status = 'submitting';
       receipt.updatedAt = nowIso();
-      receipt.commit = {
-        signature: sent.signature,
-        err: sent.confirmation.value.err ?? undefined,
-      };
+      receipt.commit = { signature: sig };
       await saveReceipt(receipt);
-      console.log(JSON.stringify({ ok: true, receipt }, null, 2));
+
+      const conf = await confirmSignature(sig);
+      receipt.status = conf.value.err ? 'failed' : 'committed';
+      receipt.updatedAt = nowIso();
+      receipt.commit = { signature: sig, err: conf.value.err ?? undefined };
+      await saveReceipt(receipt);
+      console.log(JSON.stringify({ ok: !conf.value.err, receipt }, null, 2));
     } catch (err) {
       receipt.status = 'failed';
       receipt.updatedAt = nowIso();
@@ -202,6 +231,15 @@ async function commit(args: { request: string }) {
     const amountBaseUnits = BigInt((receipt.params as any).amountBaseUnits);
     const decimals = Number((receipt.params as any).decimals);
 
+    // Preconditions: mint decimals + owner balance.
+    await splPreconditions({
+      owner: payer.publicKey,
+      toOwner,
+      mint,
+      amountBaseUnits,
+      expectedDecimals: decimals,
+    });
+
     const tx = await buildSplTransferTx({
       payer: payer.publicKey,
       owner: payer.publicKey,
@@ -213,15 +251,18 @@ async function commit(args: { request: string }) {
     signTx(tx, [payer]);
 
     try {
-      const sent = await sendTx(tx);
-      receipt.status = 'committed';
+      const sig = await sendTxSignatureOnly(tx);
+      receipt.status = 'submitting';
       receipt.updatedAt = nowIso();
-      receipt.commit = {
-        signature: sent.signature,
-        err: sent.confirmation.value.err ?? undefined,
-      };
+      receipt.commit = { signature: sig };
       await saveReceipt(receipt);
-      console.log(JSON.stringify({ ok: true, receipt }, null, 2));
+
+      const conf = await confirmSignature(sig);
+      receipt.status = conf.value.err ? 'failed' : 'committed';
+      receipt.updatedAt = nowIso();
+      receipt.commit = { signature: sig, err: conf.value.err ?? undefined };
+      await saveReceipt(receipt);
+      console.log(JSON.stringify({ ok: !conf.value.err, receipt }, null, 2));
     } catch (err) {
       receipt.status = 'failed';
       receipt.updatedAt = nowIso();

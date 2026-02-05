@@ -63,6 +63,9 @@ Notes:
 - If simulation returns an error (`receipt.shadow.err`), you can still keep the receipt as an audit trail.
 - `commit` enforces a basic precondition in this MVP: **balance must cover `lamports`**.
 
+Implementation details:
+- Commit uses a 2-phase flow: **send → persist signature as `submitting` → confirm → finalize** (safer against crashes / retries).
+
 ## CLI
 
 - `actsafe plan-transfer --to <pubkey> --sol <amount>`

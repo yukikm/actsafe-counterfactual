@@ -68,8 +68,27 @@ export async function sendTx(tx: VersionedTransaction) {
   return { signature: sig, confirmation: conf };
 }
 
+export async function sendTxSignatureOnly(tx: VersionedTransaction) {
+  const conn = connection();
+  const sig = await conn.sendTransaction(tx, {
+    skipPreflight: false,
+    maxRetries: 3,
+  });
+  return sig;
+}
+
+export async function confirmSignature(signature: string) {
+  const conn = connection();
+  return conn.confirmTransaction(signature, getCommitment());
+}
+
+export async function getSignatureStatus(signature: string) {
+  const conn = connection();
+  const st = await conn.getSignatureStatus(signature, { searchTransactionHistory: true });
+  return st.value;
+}
+
 export async function getBalanceLamports(pubkey: PublicKey) {
   const conn = connection();
   return BigInt(await conn.getBalance(pubkey, getCommitment()));
 }
-
