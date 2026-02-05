@@ -31,6 +31,86 @@ npm run dev -- commit --request <REQUEST_ID>
 npm run dev -- receipts --limit 20
 ```
 
+### Demo transcript (dry-run / unfunded)
+
+This transcript was produced on an unfunded devnet keypair to demonstrate:
+
+- shadow-run creates a receipt (audit trail)
+- commit enforces a precondition (no accidental writes)
+- failure is recorded *inside* the receipt (debuggable, replayable)
+
+**1) Plan + shadow-run**
+
+```json
+{
+  "ok": true,
+  "requestId": "9fb43018d87a74854abb7b450d0827416ae1337a968b5758ef46568e89f74bd9",
+  "receipt": {
+    "requestId": "9fb43018d87a74854abb7b450d0827416ae1337a968b5758ef46568e89f74bd9",
+    "createdAt": "2026-02-05T16:45:12.806Z",
+    "updatedAt": "2026-02-05T16:45:12.932Z",
+    "status": "simulated",
+    "kind": "sol_transfer",
+    "params": {
+      "from": "BG2jmvMf2uNw49DLewTtAhHzStQqtSttmCNsMo7Rpp5b",
+      "to": "11111111111111111111111111111111",
+      "lamports": "1000000",
+      "cluster": "https://api.devnet.solana.com"
+    },
+    "shadow": {
+      "preBalanceLamports": "0",
+      "postBalanceLamports": "-1000000",
+      "simulationLogs": [],
+      "err": "AccountNotFound",
+      "slot": 440090764
+    }
+  }
+}
+```
+
+**2) Commit** (unfunded → precondition fails)
+
+```text
+Error: Precondition failed: insufficient balance
+```
+
+**3) Receipts** (failure recorded)
+
+```json
+{
+  "ok": true,
+  "receipts": [
+    {
+      "requestId": "9fb43018d87a74854abb7b450d0827416ae1337a968b5758ef46568e89f74bd9",
+      "createdAt": "2026-02-05T16:45:12.806Z",
+      "updatedAt": "2026-02-05T16:45:16.843Z",
+      "status": "failed",
+      "kind": "sol_transfer",
+      "params": {
+        "from": "BG2jmvMf2uNw49DLewTtAhHzStQqtSttmCNsMo7Rpp5b",
+        "to": "11111111111111111111111111111111",
+        "lamports": "1000000",
+        "cluster": "https://api.devnet.solana.com"
+      },
+      "shadow": {
+        "preBalanceLamports": "0",
+        "postBalanceLamports": "-1000000",
+        "simulationLogs": [],
+        "err": "AccountNotFound",
+        "slot": 440090764
+      },
+      "commit": {
+        "err": {
+          "precondition": "insufficient_balance",
+          "pre": "0",
+          "lamports": "1000000"
+        }
+      }
+    }
+  ]
+}
+```
+
 If your environment is unfunded, `plan-transfer` will still produce a receipt, and `commit` will fail preconditions (insufficient balance) and store a failed receipt.
 
 ## What’s implemented
@@ -43,4 +123,3 @@ If your environment is unfunded, `plan-transfer` will still produce a receipt, a
 ## License
 
 MIT
-
