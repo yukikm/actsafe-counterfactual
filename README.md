@@ -102,6 +102,24 @@ This transcript was produced on an unfunded devnet keypair to demonstrate:
 }
 ```
 
+### On-chain evidence via Memo (optional)
+
+If you enable `attachMemoEvidence` in `ACTSAFE_POLICY`, commits will prepend a Solana **Memo** instruction:
+
+```
+shadowcommit:<requestId>:<evidenceHash>
+```
+
+Where `evidenceHash` is a stable sha256 of `{ requestId, kind, params, shadow }`.
+
+Example (from a dry-run receipt):
+
+```
+shadowcommit:cae7704c739c05696818a344fe8e6b8045d446b22a308f7b737fd9683e711864:1643d50abd16c2d122fe9974f5cb2703ca4c7a65c2325c413b34f9ae20b3088f
+```
+
+To generate a real transaction signature on devnet, you need a funded keypair (see https://faucet.solana.com for test SOL sources).
+
 **2) Commit** (unfunded → precondition fails)
 
 ```text
