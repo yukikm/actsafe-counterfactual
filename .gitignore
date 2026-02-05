@@ -2,5 +2,6 @@
 **/dist/
 **/.DS_Store
 **/receipts/
+**/.demo/
 **/*.log
 memory/heartbeat-state.json
