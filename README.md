@@ -10,6 +10,14 @@ This repo contains the MVP implementation under:
 
 ## Demo (CLI)
 
+## Why this matters (real agent failure modes)
+
+When agents perform real-world *writes* (transactions / API updates / posts), the hard part is not planning — it’s **safe execution**:
+
+- **Retries & dedup**: avoid double-sends on flaky RPC / blockhash expiry
+- **Preconditions**: re-check constraints before committing
+- **Receipts**: keep an auditable intent → checks → commit trail
+
 > This MVP stores receipts locally under `projects/actsafe-counterfactual/receipts/`.
 
 ```bash
@@ -73,6 +81,8 @@ This transcript was produced on an unfunded devnet keypair to demonstrate:
 ```text
 Error: Precondition failed: insufficient balance
 ```
+
+If you retry the same `commit` for the same `requestId`, it fails safely again with the same precondition — **no side effects** and the receipt remains the source of truth.
 
 **3) Receipts** (failure recorded)
 
