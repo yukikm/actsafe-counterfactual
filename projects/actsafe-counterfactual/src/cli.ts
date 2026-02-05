@@ -15,7 +15,7 @@ import {
   getSignatureStatus,
 } from './solana.js';
 import { listReceipts, loadReceipt, saveReceipt, type ActionReceipt } from './receiptStore.js';
-import { loadPolicy, enforcePolicyForSolTransfer } from './policy.js';
+import { loadPolicy, enforcePolicyForSolTransfer, enforcePolicyForSplTransfer } from './policy.js';
 import { buildSplTransferTx, signTx, splPreconditions } from './spl.js';
 
 function nowIso() {
@@ -230,6 +230,13 @@ async function commit(args: { request: string }) {
     const mint = new PublicKey((receipt.params as any).mint);
     const amountBaseUnits = BigInt((receipt.params as any).amountBaseUnits);
     const decimals = Number((receipt.params as any).decimals);
+
+    enforcePolicyForSplTransfer(policy, {
+      to: toOwner.toBase58(),
+      mint: mint.toBase58(),
+      amountBaseUnits,
+      decimals,
+    });
 
     // Preconditions: mint decimals + owner balance.
     await splPreconditions({

@@ -82,7 +82,11 @@ Example `policy.json`:
 ```json
 {
   "allowlistTo": ["<RECIPIENT_PUBKEY>"] ,
+  "allowlistMints": ["<MINT_PUBKEY>"],
   "maxSolPerTransfer": 0.01,
+  "maxUiAmountPerSplMint": {
+    "<MINT_PUBKEY>": 5
+  },
   "requireSimulationSuccess": true
 }
 ```
