@@ -212,6 +212,17 @@ async function commit(args: { request: string }) {
     const tx = await buildSolTransferTx({ from: payer.publicKey, to, lamports, ...memoArg });
     tx.sign([payer]);
 
+    if (policy.requireResimulateAtCommit) {
+      const sim = await simulateTx(tx);
+      if (sim.value.err) {
+        receipt.status = 'failed';
+        receipt.updatedAt = nowIso();
+        receipt.commit = { err: { precondition: 'resimulate_failed', err: sim.value.err } };
+        await saveReceipt(receipt);
+        throw new Error('Precondition failed: resimulate at commit failed');
+      }
+    }
+
     try {
       const sig = await sendTxSignatureOnly(tx);
       receipt.status = 'submitting';
@@ -275,6 +286,17 @@ async function commit(args: { request: string }) {
       ...memoArg,
     });
     signTx(tx, [payer]);
+
+    if (policy.requireResimulateAtCommit) {
+      const sim = await simulateTx(tx);
+      if (sim.value.err) {
+        receipt.status = 'failed';
+        receipt.updatedAt = nowIso();
+        receipt.commit = { err: { precondition: 'resimulate_failed', err: sim.value.err } };
+        await saveReceipt(receipt);
+        throw new Error('Precondition failed: resimulate at commit failed');
+      }
+    }
 
     try {
       const sig = await sendTxSignatureOnly(tx);

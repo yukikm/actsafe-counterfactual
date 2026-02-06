@@ -103,6 +103,8 @@ Example `policy.json`:
   },
   "requireSimulationSuccess": true
   ,
+  "requireResimulateAtCommit": true
+  ,
   "attachMemoEvidence": true,
   "memoPrefix": "shadowcommit"
 }

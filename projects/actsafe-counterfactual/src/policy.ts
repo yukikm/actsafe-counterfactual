@@ -17,6 +17,10 @@ export type ActSafePolicy = {
   // Require simulation to have no error before commit.
   requireSimulationSuccess?: boolean;
 
+  // Re-simulate the final transaction right before sending (fresh blockhash) and abort if simulation fails.
+  // This reduces "plan != commit" drift for agents that want extra safety.
+  requireResimulateAtCommit?: boolean;
+
   // Optional: attach a Solana Memo instruction containing the receipt evidence hash.
   attachMemoEvidence?: boolean;
   memoPrefix?: string;
