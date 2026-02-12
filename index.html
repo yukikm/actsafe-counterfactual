@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShadowCommit Live Demo — safe write-path receipts</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="wrap">
+    <div class="top">
+      <div>
+        <h1>ShadowCommit — Live Demo</h1>
+        <p class="sub">Interactive walkthrough: <b>plan → shadow-run → diff → commit → receipt</b>. No wallet required (safe sandbox).</p>
+      </div>
+      <div class="cta">
+        <a class="btn" href="https://colosseum.com/agent-hackathon/projects/shadowcommit" target="_blank" rel="noreferrer">Upvote on Colosseum</a>
+        <a class="btn secondary" href="/slides.pdf" target="_blank" rel="noreferrer">Slides (PDF)</a>
+      </div>
+    </div>
+    <div class="pillrow">
+      <span class="pill">Invariant A: recover_only on ambiguous RPC (no blind resend)</span>
+      <span class="pill">Invariant B: commit-boundary state gate</span>
+      <span class="pill">Invariant C: finalized-or-evidence</span>
+    </div>
+  </header>
+
+  <main class="wrap grid">
+    <section class="card">
+      <h2>1) Run the flow</h2>
+      <p>Click through the steps. We’ll generate a deterministic <code>requestId</code> and an evolving receipt envelope.</p>
+
+      <div class="stepper">
+        <button id="btnPlan" class="btn">Plan</button>
+        <button id="btnSim" class="btn">Shadow-run (simulate)</button>
+        <button id="btnDiff" class="btn">Diff</button>
+        <button id="btnCommit" class="btn">Commit (safe)</button>
+        <button id="btnReset" class="btn secondary">Reset</button>
+      </div>
+
+      <div class="row">
+        <label>Intent (editable)</label>
+        <textarea id="intent" rows="6"></textarea>
+      </div>
+
+      <div class="row">
+        <label>Receipt envelope</label>
+        <pre id="receipt" class="pre"></pre>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2) Verify</h2>
+      <p>Paste any receipt JSON here (or use the one generated on the left) and verify core invariants.</p>
+
+      <div class="row">
+        <label>Receipt JSON</label>
+        <textarea id="verifyInput" rows="10" spellcheck="false"></textarea>
+      </div>
+
+      <div class="row">
+        <div class="stepper">
+          <button id="btnVerify" class="btn">Verify invariants</button>
+          <button id="btnCopy" class="btn secondary">Copy generated receipt → verifier</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <label>Result</label>
+        <pre id="verifyOut" class="pre"></pre>
+      </div>
+
+      <hr class="hr" />
+      <h3>Why this matters for profit</h3>
+      <ul>
+        <li><b>Double-send / double-fill</b> from retry ambiguity is pure negative EV.</li>
+        <li><b>State drift</b> between simulate and commit creates unexpected writes.</li>
+        <li><b>Receipts</b> make failures recoverable and auditable instead of “trust me bro”.</li>
+      </ul>
+    </section>
+
+    <section class="card full">
+      <h2>3) Copy/paste integration (for agents)</h2>
+      <p>If you’re building a bot, start here (in the repo):</p>
+      <ul>
+        <li><code>projects/actsafe-counterfactual/src/integration/verifier.ts</code></li>
+        <li><code>projects/actsafe-counterfactual/src/integration/receipt.schema.json</code></li>
+        <li><code>projects/actsafe-counterfactual/docs/RELIABILITY_MATRIX.md</code></li>
+      </ul>
+      <p class="sub">This live demo is intentionally wallet-free. The real value is the receipt/verifier contract you can adopt.</p>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <div>Built for Colosseum Agent Hackathon — ShadowCommit</div>
+    <div class="sub">Tip: link is placed in the button above to avoid suppressing impressions in the first sentence.</div>
+  </footer>
+
+  <script src="/demo.js"></script>
+</body>
+</html>

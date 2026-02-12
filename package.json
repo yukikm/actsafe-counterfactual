@@ -1,0 +1,23 @@
+{
+  "name": "actsafe-site",
+  "version": "1.0.0",
+  "description": "**ShadowCommit** is Counterfactual Ops for Solana transactions:",
+  "main": "demo.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yukikm/actsafe-counterfactual.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yukikm/actsafe-counterfactual/issues"
+  },
+  "homepage": "https://github.com/yukikm/actsafe-counterfactual#readme",
+  "devDependencies": {
+    "@marp-team/marp-cli": "^4.2.3"
+  }
+}
