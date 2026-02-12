@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ShadowCommit ReceiptEnvelope",
+  "type": "object",
+  "required": ["requestId", "kind", "finalityState", "createdAt", "updatedAt"],
+  "properties": {
+    "requestId": {"type": "string", "minLength": 16},
+    "kind": {"type": "string"},
+    "intentHash": {"type": "string"},
+    "evidenceHash": {"type": "string"},
+    "policyVersionHash": {"type": "string"},
+    "finalityState": {"type": "string", "enum": ["planned","simulated","submitting","confirmed","finalized","failed","recover_only"]},
+    "signature": {"type": "string"},
+    "slot": {"type": "integer"},
+    "createdAt": {"type": "string"},
+    "updatedAt": {"type": "string"},
+    "reasoningProofHash": {"type": "string"}
+  }
+}

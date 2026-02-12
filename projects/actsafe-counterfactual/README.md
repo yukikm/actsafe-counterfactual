@@ -135,6 +135,20 @@ This is a lightweight way to make the receipt tamper-evident *on-chain* without 
 - Uses `@solana/web3.js` for speed; can be migrated to `@solana/kit` later.
 - Receipts are local JSON files in this MVP.
 
+## Copy/paste integration (for other agents)
+
+If you want to depend on ShadowCommit receipts downstream, start with the minimal envelope + verifier:
+
+- `src/integration/envelope.ts`
+- `src/integration/verifier.ts`
+- `src/integration/receipt.schema.json`
+
+Recommended policy for downstream dependence:
+- accept only `finalized` receipts, OR
+- accept `confirmed` only when `evidenceHash` is present and anchored (Memo) — **finalized-or-evidence**.
+
+See also: `docs/RELIABILITY_MATRIX.md`.
+
 ## Roadmap (post-MVP)
 
 - Expand from SOL transfer to SPL token transfers + program CPIs
