@@ -41,6 +41,17 @@ export SOLANA_KEYPAIR=~/.config/solana/id.json
 
 > Note: If the keypair is unfunded, the **commit** step will fail safely (precondition) and the failure will be recorded in the receipt — this is expected and demonstrates the safety gates.
 
+## Agent eval (60 seconds, no wallet)
+
+If you just want to sanity-check the **Receipt v0.1** verifier + invariants quickly (no Solana keypair required):
+
+```bash
+cd projects/actsafe-counterfactual
+./scripts/agent-eval.sh
+```
+
+Expected: JSON output with `ok: true` (a “good” envelope passes, and a deliberately-bad envelope fails).
+
 ### Configure
 
 - RPC: set `SOLANA_RPC_URL` (default: devnet)
