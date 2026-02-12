@@ -27,6 +27,20 @@ npm i
 npm run build
 ```
 
+## Judge demo (3 minutes)
+
+This repo includes a one-shot demo script that runs the full loop:
+plan → shadow-run → commit attempt → receipts.
+
+```bash
+export SOLANA_RPC_URL=https://api.devnet.solana.com
+export SOLANA_KEYPAIR=~/.config/solana/id.json
+
+./scripts/demo-judge.sh
+```
+
+> Note: If the keypair is unfunded, the **commit** step will fail safely (precondition) and the failure will be recorded in the receipt — this is expected and demonstrates the safety gates.
+
 ### Configure
 
 - RPC: set `SOLANA_RPC_URL` (default: devnet)
