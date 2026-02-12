@@ -42,6 +42,11 @@ The MVP implementation lives under:
 
 - `projects/actsafe-counterfactual/`
 
+## Live demo + slides
+
+- Live demo (interactive, no wallet): https://actsafe-counterfactual.vercel.app
+- Slides (PDF): https://actsafe-counterfactual.vercel.app/slides.pdf
+
 ## Demo (CLI)
 
 > This MVP stores receipts locally under `projects/actsafe-counterfactual/receipts/`.
