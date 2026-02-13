@@ -37,6 +37,12 @@ function setEnvelope(partial){
 
 function reset(){
   state = { requestId:null, envelope:null, diff:null };
+
+  // UX: disable buttons until prior step is completed.
+  btnSim.disabled = true;
+  btnDiff.disabled = true;
+  btnCommit.disabled = true;
+
   intentEl.value = JSON.stringify({
     kind: 'sol_transfer',
     to: '11111111111111111111111111111111',
@@ -63,6 +69,10 @@ async function plan(){
     createdAt: nowIso(),
     updatedAt: nowIso(),
   });
+
+  btnSim.disabled = false;
+  btnDiff.disabled = false;
+  btnCommit.disabled = false;
 }
 
 async function simulate(){

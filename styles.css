@@ -8,6 +8,8 @@ h1{margin:0 0 8px 0;font-size:28px}
 .grid{display:grid;gap:16px;grid-template-columns:1fr;}
 @media(min-width:980px){.grid{grid-template-columns:1fr 1fr}.full{grid-column:1/-1}}
 .card{background:rgba(18,22,37,.8);border:1px solid var(--line);border-radius:14px;padding:16px;backdrop-filter: blur(6px)}
+.qs{margin:8px 0 0 18px;color:var(--text)}
+.qs li{margin:6px 0}
 .card h2{margin:0 0 10px 0;font-size:18px}
 .card h3{margin:14px 0 8px 0;font-size:16px}
 .pillrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
