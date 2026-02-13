@@ -1,0 +1,23 @@
+{
+  "id": "rpc_ambiguity_unknown:v0",
+  "title": "RPC ambiguity: accepted then epistemic loss → UNKNOWN → reconcile",
+  "scenario": {
+    "kind": "rpc_ambiguity",
+    "notes": "A send returns a signature, but subsequent status checks disagree / are unavailable. The implementation must NOT blindly rebroadcast; it must reconcile and dedupe by requestId before any retry."
+  },
+  "receipt": {
+    "receiptVersion": "writereceipt-v0",
+    "requestId": "REQ_PLACEHOLDER_SHA256",
+    "intentHash": "INTENT_PLACEHOLDER_SHA256",
+    "policyVersionHash": "POLICY_PLACEHOLDER_SHA256",
+    "checkedAtSlot": 0,
+    "status": "unknown",
+    "evidence": {
+      "traceHash": "TRACE_PLACEHOLDER_SHA256"
+    }
+  },
+  "expected": {
+    "verifierRule": "If status is UNKNOWN, implementation must reconcile across RPCs (or deterministic postcondition read) before any retry; retries must be deduped by requestId.",
+    "result": "pass"
+  }
+}

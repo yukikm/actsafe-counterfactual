@@ -4,7 +4,8 @@
   "description": "**ShadowCommit** is Counterfactual Ops for Solana transactions:",
   "main": "demo.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "verify:writereceipt-v0": "node scripts/verify_writereceipt_v0.mjs"
   },
   "repository": {
     "type": "git",

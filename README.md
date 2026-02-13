@@ -42,6 +42,16 @@ The MVP implementation lives under:
 
 - `projects/actsafe-counterfactual/`
 
+## WriteReceipt v0 conformance pack (judge-friendly)
+
+A minimal conformance pack (fixtures + 1-command verifier):
+
+```bash
+npm run verify:writereceipt-v0
+```
+
+See: `conformance/writereceipt-v0/`
+
 ## Live demo + slides
 
 - Live demo (interactive, no wallet): https://actsafe-counterfactual.vercel.app

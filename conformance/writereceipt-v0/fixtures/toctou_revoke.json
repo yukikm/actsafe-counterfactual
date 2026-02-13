@@ -1,0 +1,23 @@
+{
+  "id": "toctou_revoke:v0",
+  "title": "TOCTOU: simulate ok, auth revoked before commit → fail-closed",
+  "scenario": {
+    "kind": "toctou_revoke",
+    "notes": "Authorization/license/policy snapshot changes between shadow-run (simulate) and commit. Commit must fail-closed unless the current policyVersionHash matches the receipt's policyVersionHash."
+  },
+  "receipt": {
+    "receiptVersion": "writereceipt-v0",
+    "requestId": "REQ_PLACEHOLDER_SHA256",
+    "intentHash": "INTENT_PLACEHOLDER_SHA256",
+    "policyVersionHash": "POLICY_V1_SHA256",
+    "checkedAtSlot": 0,
+    "status": "failed",
+    "evidence": {
+      "traceHash": "TRACE_PLACEHOLDER_SHA256"
+    }
+  },
+  "expected": {
+    "verifierRule": "If current policyVersionHash != receipt.policyVersionHash at commit time, commit must fail-closed and persist a failed receipt.",
+    "result": "pass"
+  }
+}
