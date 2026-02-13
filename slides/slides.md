@@ -44,6 +44,16 @@ They die because **writes are unsafe**:
 
 ---
 
+## Privacy-compatible receipts (new)
+You often need **auditability** *without* leaking sensitive inputs.
+
+ShadowCommit supports **selective disclosure**:
+- publish a minimal receipt + hashes
+- keep sensitive trace off-chain, committed by `traceHash`
+- disclose the trace only to the right party (counterparty / auditor)
+
+---
+
 ## What you can copy/paste today
 - Receipt envelope + verifier
 - Reliability matrix (failure mode → invariant → receipt transition)

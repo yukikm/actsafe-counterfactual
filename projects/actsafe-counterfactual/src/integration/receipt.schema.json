@@ -1,15 +1,44 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "ShadowCommit ReceiptEnvelope",
+  "title": "ShadowCommit ReceiptEnvelope (v0.2: privacy-compatible)",
   "type": "object",
   "required": ["requestId", "kind", "finalityState", "createdAt", "updatedAt"],
+  "additionalProperties": true,
   "properties": {
     "requestId": {"type": "string", "minLength": 16},
     "kind": {"type": "string"},
+
     "intentHash": {"type": "string"},
     "evidenceHash": {"type": "string"},
     "policyVersionHash": {"type": "string"},
-    "finalityState": {"type": "string", "enum": ["planned","simulated","submitting","confirmed","finalized","failed","recover_only"]},
+
+    "traceHash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "disclosurePolicy": {
+      "type": "string",
+      "enum": ["public_minimal", "shared_with_counterparty", "encrypted_for_auditor"]
+    },
+    "encryption": {
+      "type": "object",
+      "required": ["alg", "recipient", "ciphertextHash"],
+      "properties": {
+        "alg": {"type": "string", "minLength": 1},
+        "recipient": {"type": "string", "minLength": 1},
+        "ciphertextHash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+
+    "finalityState": {
+      "type": "string",
+      "enum": [
+        "planned",
+        "simulated",
+        "submitting",
+        "confirmed",
+        "finalized",
+        "failed",
+        "recover_only"
+      ]
+    },
     "signature": {"type": "string"},
     "slot": {"type": "integer"},
     "createdAt": {"type": "string"},

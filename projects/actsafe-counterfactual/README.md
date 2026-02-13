@@ -17,6 +17,7 @@ This is an MVP built for the Colosseum Agent Hackathon.
 - **Idempotency / retries**: avoid double-sends when blockhash expires / RPC flakes
 - **Auditability**: store intent → checks → commit as a receipt
 - **Bounded risk**: re-check preconditions before committing
+- **Privacy-compatible transparency**: publish minimal receipts + hashes, keep sensitive trace details off-chain (selective disclosure)
 
 ## Quickstart
 
