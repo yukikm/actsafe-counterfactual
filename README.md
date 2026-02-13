@@ -6,6 +6,16 @@
 
 This repository is an MVP built for the **Colosseum Agent Hackathon**.
 
+## WriteReceipt v0 conformance pack (judge-friendly)
+
+A minimal conformance pack (fixtures + 1-command verifier):
+
+```bash
+npm run verify:writereceipt-v0
+```
+
+See: `conformance/writereceipt-v0/`
+
 ## Problem
 
 Agents fail in the real world not because they can’t plan, but because *writes* are dangerous:
@@ -42,15 +52,6 @@ The MVP implementation lives under:
 
 - `projects/actsafe-counterfactual/`
 
-## WriteReceipt v0 conformance pack (judge-friendly)
-
-A minimal conformance pack (fixtures + 1-command verifier):
-
-```bash
-npm run verify:writereceipt-v0
-```
-
-See: `conformance/writereceipt-v0/`
 
 ## Live demo + slides
 

@@ -1,0 +1,23 @@
+{
+  "id": "reorg_confirmed_drop:v0",
+  "title": "Reorg: confirmed then dropped → UNKNOWN → reconcile",
+  "scenario": {
+    "kind": "reorg_confirmed_drop",
+    "notes": "A tx is observed as confirmed at t1, but later evidence indicates it was dropped/reorged. The implementation must transition to UNKNOWN and reconcile (do not assume finality)."
+  },
+  "receipt": {
+    "receiptVersion": "writereceipt-v0",
+    "requestId": "REQ_PLACEHOLDER_SHA256",
+    "intentHash": "INTENT_PLACEHOLDER_SHA256",
+    "policyVersionHash": "POLICY_PLACEHOLDER_SHA256",
+    "checkedAtSlot": 0,
+    "status": "unknown",
+    "evidence": {
+      "traceHash": "TRACE_PLACEHOLDER_SHA256"
+    }
+  },
+  "expected": {
+    "verifierRule": "If a receipt transitions from CONFIRMED to DROPPED/REORGED, it must become UNKNOWN and require reconcile before any retry; retries must remain idempotent by requestId.",
+    "result": "pass"
+  }
+}
