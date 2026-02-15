@@ -1,10 +1,20 @@
 # ShadowCommit
 
-**ShadowCommit** is Counterfactual Ops for Solana transactions:
+**ShadowCommit = Counterfactual Ops for Solana writes**
 
 > **shadow-run (simulate) → diff → commit**, plus **Action Receipts** for **idempotent retries** and auditability.
 
 This repository is an MVP built for the **Colosseum Agent Hackathon**.
+
+## Why this is different (strengths)
+
+Most agent demos stop at “it can send a tx”. ShadowCommit focuses on the part that breaks in production: **safe, repeatable writes**.
+
+- **Idempotent retries by design**: deterministic `requestId` prevents accidental double-sends across retries.
+- **Counterfactual safety**: shadow-run (simulation + pre-checks) before committing real state changes.
+- **WriteReceipt v0**: receipts are durable artifacts you can store, diff, and audit (not just logs).
+- **Judge-friendly verification**: a **WriteReceipt v0 conformance pack** (fixtures + 1-command verifier).
+- **Live demo + slides**: hosted UI + PDF-like slides for fast evaluation.
 
 ## WriteReceipt v0 conformance pack (judge-friendly)
 
@@ -57,6 +67,17 @@ The MVP implementation lives under:
 
 - Live demo (interactive, no wallet): https://actsafe-counterfactual.vercel.app
 - Slides (PDF): https://actsafe-counterfactual.vercel.app/slides.pdf
+
+## Quick pitch (for judges)
+
+ShadowCommit gives agents a minimal but complete “transaction execution protocol”:
+
+1) **Plan**: define intent (normalized params)
+2) **Shadow-run**: simulate + capture counterfactual state
+3) **Commit**: only execute if preconditions still hold
+4) **Receipt**: store `{ intent, shadow, commit, errors }` for retries + audit
+
+The key output is not just a transaction signature — it’s a **receipt you can verify and replay safely**.
 
 ## Demo (CLI)
 
